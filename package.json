@@ -9,6 +9,11 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "nanoid": "6.0.1"
+    "@mastra/core": "1.61.0",
+    "@mastra/loggers": "1.2.0",
+    "mastra": "1.26.0",
+    "nanoid": "6.0.1",
+    "ollama-ai-provider-v2": "4.0.1",
+    "zod": "4.4.3"
   }
 }
