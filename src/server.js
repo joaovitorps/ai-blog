@@ -19,13 +19,24 @@ const server = createServer((req, res) => {
         const { idea } = bodyJSON;
 
         const responseSchema = z.object({
-          id: z.string(),
-          title: z.string(),
-          content: z.string(),
-          published_at: z.coerce.date().nullish(),
-          created_at: z.coerce.date(),
-          approved_at: z.coerce.date().nullish(),
-          rejected_at: z.coerce.date().nullish(),
+          id: z.nanoid().describe("id created with nanoid"),
+          title: z.string().describe("title of the post"),
+          content: z.string().describe("content of the post"),
+          published_at: z.coerce
+            .date()
+            .nullish()
+            .describe("date when the post was published"),
+          created_at: z.coerce
+            .date()
+            .describe("date when the post was created"),
+          approved_at: z.coerce
+            .date()
+            .nullish()
+            .describe("date when the post was approved"),
+          rejected_at: z.coerce
+            .date()
+            .nullish()
+            .describe("date when the post was rejected"),
         });
 
         const agent = mastra.getAgentById(postWriterAgentId);
@@ -38,7 +49,7 @@ const server = createServer((req, res) => {
       } catch (error) {
         console.log(error);
         res.writeHead(500);
-        return res.end(JSON.stringify({ data: JSON.parse(response.text) }));
+        return res.end(JSON.stringify(error.message));
       }
     });
 
