@@ -4,12 +4,28 @@ import { z } from "zod";
 
 import { postWriterAgentId } from "./mastra/agents/post-writer-agent.js";
 import { mastra } from "./mastra/index.js";
-import { fetchPost } from "./model/post.js";
+import { fetchPost, getPost, insertPost } from "./model/post.js";
 
 const { PROTOCOL, HOST, PORT } = process.env;
 
 const server = createServer(async (req, res) => {
   res.setHeader("content-type", "application/json");
+
+  const pathMatchPostId = req.url.match(/^\/posts\/([^/]+)$/);
+  if (req.method === "GET" && pathMatchPostId) {
+    const postId = pathMatchPostId[1];
+
+    try {
+      const data = await getPost(postId);
+
+      res.writeHead(200);
+      return res.end(JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+      res.writeHead(500);
+      return res.end(JSON.stringify({ error: error.message }));
+    }
+  }
 
   if (req.method === "GET" && req.url === "/posts") {
     try {
@@ -20,7 +36,7 @@ const server = createServer(async (req, res) => {
     } catch (error) {
       console.log(error);
       res.writeHead(500);
-      return res.end(JSON.stringify(error.message));
+      return res.end(JSON.stringify({ error: error.message }));
     }
   }
 
@@ -63,12 +79,14 @@ const server = createServer(async (req, res) => {
 
         const jsonResponse = JSON.parse(response.text);
 
+        const createdPost = await insertPost(jsonResponse);
+
         res.writeHead(200);
-        return res.end(JSON.stringify({ data: jsonResponse }));
+        return res.end(JSON.stringify(createdPost));
       } catch (error) {
         console.log(error);
         res.writeHead(500);
-        return res.end(JSON.stringify(error.message));
+        return res.end(JSON.stringify({ error: error.message }));
       }
     });
 

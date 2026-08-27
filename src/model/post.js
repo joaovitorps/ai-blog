@@ -12,6 +12,16 @@ export function mapRowToPost(dbRow) {
   };
 }
 
+export async function getPost(postId) {
+  const { rows } = await db.query("SELECT * FROM post WHERE id = $1", [postId]);
+
+  if (rows.length === 0) {
+    throw new Error(`Post with id ${postId} not found`);
+  }
+
+  return { post: mapRowToPost(rows[0]) };
+}
+
 export async function fetchPost() {
   const { rows } = await db.query(
     "SELECT * FROM post ORDER BY published_at DESC",
@@ -21,8 +31,15 @@ export async function fetchPost() {
 }
 
 export async function insertPost(post) {
-  const { title, content, published_at, created_at, approved_at, rejected_at } =
-    post;
+  const {
+    id,
+    title,
+    content,
+    published_at,
+    created_at,
+    approved_at,
+    rejected_at,
+  } = post;
 
   const { rows } = await db.query(
     `INSERT INTO post (id, title, content, published_at, created_at, approved_at, rejected_at) VALUES ($1, $2, $3, $4, $5 , $6, $7)
