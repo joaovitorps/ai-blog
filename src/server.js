@@ -1,6 +1,8 @@
 import { createServer } from "node:http";
-import { postWriterAgentId } from "./mastra/agents/post-writer-agent.js";
+
 import { z } from "zod";
+
+import { postWriterAgentId } from "./mastra/agents/post-writer-agent.js";
 import { mastra } from "./mastra/index.js";
 import { fetchPost } from "./model/post.js";
 

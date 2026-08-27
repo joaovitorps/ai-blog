@@ -1,6 +1,8 @@
 {
   "name": "ai-blog",
   "version": "1.0.0",
+  "license": "ISC",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "node --env-file=.env --watch src/server.js",
@@ -16,8 +18,6 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check"
   },
-  "license": "ISC",
-  "type": "module",
   "dependencies": {
     "@mastra/core": "1.61.0",
     "@mastra/loggers": "1.2.0",
@@ -37,15 +37,15 @@
     "oxlint": "1.80.0",
     "postgrator-cli": "10.0.0"
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
       "npm run lint:fix",
       "npm run fmt"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
     ]
   }
 }
